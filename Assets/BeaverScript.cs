@@ -1,8 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
-using System;
+using UnityEngine;
 
 public class BeaverScript : MonoBehaviour
 {
@@ -19,8 +19,6 @@ public class BeaverScript : MonoBehaviour
     private bool _solved = false;
 
     private List<Card> Cards = new List<Card>();
-
-    private Card target;
     private int targetPos;
 
     private BeaverExtensions.BeaverMode mode = BeaverExtensions.BeaverMode.None;
@@ -30,10 +28,7 @@ public class BeaverScript : MonoBehaviour
     {
         Cards = new List<Card>();
         for (int i = 0; i < cardTextures.Length; i++)
-        {
-            Cards.Add(new Card(cardTextures[i], (i % 13) + 2, Mathf.FloorToInt(i / 13)));
-            if (Cards.Last().Rank == 14) Cards.Last().Rank = 1;
-        }
+            Cards.Add(new Card(cardTextures[i], ((i + 1) % 13) + 1, Mathf.FloorToInt(i / 13)));
 
         int a = UnityEngine.Random.Range(0, 2);
         mode |= BeaverExtensions.BeaverMode.AntiUno;
@@ -41,23 +36,21 @@ public class BeaverScript : MonoBehaviour
 
         Cards = Cards.BeaverShuffle(mode);
 
-        bool chk = true;
-        do
+        while (true)
         {
             Texture targetTexture = cardTextures.PickRandom();
-            Card target = new Card(targetTexture, (System.Array.IndexOf(cardTextures, targetTexture) % 13) + 2, Mathf.FloorToInt(System.Array.IndexOf(cardTextures, targetTexture) / 13));
+            Card target = new Card(targetTexture, ((Array.IndexOf(cardTextures, targetTexture) + 1) % 13) + 1, Mathf.FloorToInt(Array.IndexOf(cardTextures, targetTexture) / 13));
             for (int i = Cards.Count() - 2; i >= 0; i--)
             {
-                if (!BeaverExtensions.BeaverCheck(mode, target, Cards[i+1]) && !BeaverExtensions.BeaverCheck(mode, Cards[i], target))
+                if (!BeaverExtensions.BeaverCheck(mode, target, Cards[i]) && !BeaverExtensions.BeaverCheck(mode, Cards[i + 1], target))
                 {
                     Cards.Insert(i + 1, target);
                     targetPos = i + 1;
-                    chk = false;
-                    break;
+                    goto done;
                 }
             }
         }
-        while (chk);
+        done:
 
         for (int i = 0; i < Cards.Count; i++)
         {
@@ -152,34 +145,33 @@ public static class BeaverExtensions
         List<Card> outList = new List<Card>();
         outList.Add(list.PickRandom());
         list.Remove(outList[0]);
-        while (list.Where(c => BeaverCheck(mode, c, outList.Last())).Count() > 0 && outList.Count() < 103)
-        //while (list.Where(c => c.Rank == outList.Last().Rank || c.Suit == outList.Last().Suit).Count() > 0)
+        while (outList.Count() < 103)
         {
-            outList.Add(list.Where(c => BeaverCheck(mode, c, outList.Last())).PickRandom());
-            //outList.Add(list.Where(c => c.Rank == outList.Last().Rank || c.Suit == outList.Last().Suit).PickRandom());
+            var candidates = list.Where(c => BeaverCheck(mode, outList.Last(), c)).ToArray();
+            if (candidates.Length == 0)
+                break;
+            outList.Add(candidates.PickRandom());
             list.Remove(outList.Last());
         }
         outList.Reverse();
-        list = outList;
-        return list;
+        return outList;
     }
 
-    public static bool BeaverCheck(BeaverMode mode, Card played, Card on)
+    public static bool BeaverCheck(BeaverMode mode, Card prev, Card played)
     {
         bool outBool = true;
-        if (mode == BeaverMode.None)
-            outBool &= true;
         if ((mode & BeaverMode.Uno) == BeaverMode.Uno)
-            outBool &= played.Rank == on.Rank || played.Suit == on.Suit;
+            outBool &= played.Rank == prev.Rank || played.Suit == prev.Suit;
         if ((mode & BeaverMode.AntiUno) == BeaverMode.AntiUno)
-            outBool &= played.Rank != on.Rank && played.Suit != on.Suit;
+            outBool &= played.Rank != prev.Rank && played.Suit != prev.Suit;
         if ((mode & BeaverMode.Up) == BeaverMode.Up)
-            outBool &= played.Rank >= on.Rank || on.Rank >= 11;
+            outBool &= played.Rank >= prev.Rank || prev.Rank >= 11;
         if ((mode & BeaverMode.Down) == BeaverMode.Down)
-            outBool &= played.Rank <= on.Rank || played.Rank >= 11;
+            outBool &= played.Rank <= prev.Rank || played.Rank >= 11;
         return outBool;
     }
 
+    [Flags]
     public enum BeaverMode
     {
         None = 0,

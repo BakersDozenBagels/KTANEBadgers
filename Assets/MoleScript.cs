@@ -19,8 +19,6 @@ public class MoleScript : MonoBehaviour
     private bool _solved = false;
 
     private List<Card> Cards = new List<Card>();
-
-    private Card target;
     private int targetPos;
 
     private MoleExtensions.MoleMode mode = MoleExtensions.MoleMode.None;
@@ -30,10 +28,7 @@ public class MoleScript : MonoBehaviour
     {
         Cards = new List<Card>();
         for (int i = 0; i < cardTextures.Length; i++)
-        {
-            Cards.Add(new Card(cardTextures[i], (i % 13) + 2, Mathf.FloorToInt(i / 13)));
-            if (Cards.Last().Rank == 14) Cards.Last().Rank = 1;
-        }
+            Cards.Add(new Card(cardTextures[i], ((i + 1) % 13) + 1, i / 13));
 
         int a = UnityEngine.Random.Range(0, 2);
         mode |= a == 0 ? MoleExtensions.MoleMode.Up : MoleExtensions.MoleMode.Down;
@@ -55,23 +50,21 @@ public class MoleScript : MonoBehaviour
 
         Cards = Cards.MoleShuffle(mode);
 
-        bool chk = true;
-        do
+        while (true)
         {
             Texture targetTexture = cardTextures.PickRandom();
-            Card target = new Card(targetTexture, (System.Array.IndexOf(cardTextures, targetTexture) % 13) + 2, Mathf.FloorToInt(System.Array.IndexOf(cardTextures, targetTexture) / 13));
+            Card target = new Card(targetTexture, ((Array.IndexOf(cardTextures, targetTexture) + 1) % 13) + 1, Mathf.FloorToInt(Array.IndexOf(cardTextures, targetTexture) / 13));
             for (int i = Cards.Count() - 2; i >= 0; i--)
             {
                 if (!MoleExtensions.MoleCheck(mode, target, Cards[i + 1]) && !MoleExtensions.MoleCheck(mode, Cards[i], target))
                 {
                     Cards.Insert(i + 1, target);
                     targetPos = i + 1;
-                    chk = false;
-                    break;
+                    goto done;
                 }
             }
         }
-        while (chk);
+        done:
 
         for (int i = 0; i < Cards.Count; i++)
         {
@@ -167,15 +160,12 @@ public static class MoleExtensions
         outList.Add(list.PickRandom());
         list.Remove(outList[0]);
         while (list.Where(c => MoleCheck(mode, c, outList.Last())).Count() > 0 && outList.Count() < 103)
-        //while (list.Where(c => c.Rank == outList.Last().Rank || c.Suit == outList.Last().Suit).Count() > 0)
         {
             outList.Add(list.Where(c => MoleCheck(mode, c, outList.Last())).PickRandom());
-            //outList.Add(list.Where(c => c.Rank == outList.Last().Rank || c.Suit == outList.Last().Suit).PickRandom());
             list.Remove(outList.Last());
         }
         outList.Reverse();
-        list = outList;
-        return list;
+        return outList;
     }
 
     public static bool MoleCheck(MoleMode mode, Card played, Card on)
@@ -202,6 +192,7 @@ public static class MoleExtensions
         return outBool;
     }
 
+    [Flags]
     public enum MoleMode
     {
         None = 0,

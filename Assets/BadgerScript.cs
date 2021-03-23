@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BadgerScript : MonoBehaviour {
+public class BadgerScript : MonoBehaviour
+{
     public Texture[] cardTextures;
     public Texture goalCard;
     public GameObject cardTemplate;
@@ -16,8 +17,9 @@ public class BadgerScript : MonoBehaviour {
 
     private bool _solved = false;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         cardTextures.Shuffle();
         for (int i = 0; i < cardTextures.Length; i++)
         {
@@ -30,7 +32,7 @@ public class BadgerScript : MonoBehaviour {
         LeftButton.OnInteract += Left;
         RightButton.OnInteract += Right;
         BadgerButton.OnInteract += Badger;
-	}
+    }
 
     private bool Left()
     {

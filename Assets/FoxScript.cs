@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
-public class FoxScript : MonoBehaviour {
+public class FoxScript : MonoBehaviour
+{
     public Texture[] cardTextures;
     public GameObject cardTemplate;
     public Transform spawnPoint, midPoint, endPoint;
@@ -17,36 +19,32 @@ public class FoxScript : MonoBehaviour {
     private bool _solved = false;
 
     private List<Card> Cards = new List<Card>();
-
-    private Card target;
     private int targetPos;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         Cards = new List<Card>();
         for (int i = 0; i < cardTextures.Length; i++)
-        {
-            Cards.Add(new Card(cardTextures[i], (i % 13) + 2, Mathf.FloorToInt(i / 13)));
-            if (Cards.Last().Rank == 14) Cards.Last().Rank = 1;
-        }
+            Cards.Add(new Card(cardTextures[i], ((i + 1) % 13) + 1, i / 13));
+
         Cards = Cards.FoxShuffle();
-        bool chk = true;
-        do
+
+        while (true)
         {
             Texture targetTexture = cardTextures.PickRandom();
-            Card target = new Card(targetTexture, (System.Array.IndexOf(cardTextures, targetTexture) % 13) + 2, Mathf.FloorToInt(System.Array.IndexOf(cardTextures, targetTexture) / 13));
+            Card target = new Card(targetTexture, ((Array.IndexOf(cardTextures, targetTexture) + 1) % 13) + 1, Mathf.FloorToInt(Array.IndexOf(cardTextures, targetTexture) / 13));
             for (int i = Cards.Count() - 2; i >= 0; i--)
             {
-                if (!((Cards[i].Rank == target.Rank) || (target.Rank >= 11 && Cards[i].Suit == target.Suit) || (Cards[i].Rank > target.Rank && Cards[i].Suit == target.Suit)) && !((target.Rank == Cards[i+1].Rank) || (Cards[i+1].Rank >= 11 && target.Suit == Cards[i+1].Suit) || (Cards[i+1].Rank < target.Rank && target.Suit == Cards[i + 1].Suit)))
+                if (!FoxExtensions.FoxCheck(target, Cards[i]) && !FoxExtensions.FoxCheck(Cards[i + 1], target))
                 {
                     Cards.Insert(i + 1, target);
                     targetPos = i + 1;
-                    chk = false;
-                    break;
+                    goto done;
                 }
             }
         }
-        while (chk);
+        done:
 
         for (int i = 0; i < Cards.Count; i++)
         {
@@ -59,7 +57,7 @@ public class FoxScript : MonoBehaviour {
         LeftButton.OnInteract += Left;
         RightButton.OnInteract += Right;
         BadgerButton.OnInteract += Badger;
-	}
+    }
 
     private bool Left()
     {
@@ -133,20 +131,6 @@ public class FoxScript : MonoBehaviour {
     }
 }
 
-public class Card
-{
-    public Texture Texture { get; set; }
-    public int Rank { get; set; }
-    public int Suit { get; set; }
-
-    public Card(Texture Texture, int Rank, int Suit)
-    {
-        this.Texture = Texture;
-        this.Rank = Rank;
-        this.Suit = Suit;
-    }
-}
-
 public static class FoxExtensions
 {
     public static List<Card> FoxShuffle(this List<Card> list)
@@ -156,15 +140,21 @@ public static class FoxExtensions
         List<Card> outList = new List<Card>();
         outList.Add(list.PickRandom());
         list.Remove(outList[0]);
-        while (list.Where(c => (c.Rank > outList.Last().Rank && c.Suit == outList.Last().Suit) || (c.Rank == outList.Last().Rank) || (11 <= outList.Last().Rank && outList.Last().Rank <= 13 && c.Suit == outList.Last().Suit)).Count() > 0 && outList.Count() < 51)
-        //while (list.Where(c => c.Rank == outList.Last().Rank || c.Suit == outList.Last().Suit).Count() > 0)
+
+        while (outList.Count < 51)
         {
-            outList.Add(list.Where(c => (c.Rank > outList.Last().Rank && c.Suit == outList.Last().Suit) || (c.Rank == outList.Last().Rank) || (11 <= outList.Last().Rank && outList.Last().Rank <= 13 && c.Suit == outList.Last().Suit)).PickRandom());
-            //outList.Add(list.Where(c => c.Rank == outList.Last().Rank || c.Suit == outList.Last().Suit).PickRandom());
+            var candidates = list.Where(c => FoxCheck(outList.Last(), c)).ToArray();
+            if (candidates.Length == 0)
+                break;
+            outList.Add(candidates.PickRandom());
             list.Remove(outList.Last());
         }
         outList.Reverse();
-        list = outList;
         return outList;
+    }
+
+    public static bool FoxCheck(Card prev, Card played)
+    {
+        return (played.Rank == prev.Rank) || (prev.Rank >= 11 && played.Suit == prev.Suit) || (played.Rank > prev.Rank && played.Suit == prev.Suit);
     }
 }
