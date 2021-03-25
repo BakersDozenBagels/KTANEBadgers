@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ktanebadgers-master", "ktanebadgers-master.csproj", "{DE4D8F42-A790-F8AD-7BB7-4F0828920F98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ktanebadgers-master.Editor", "ktanebadgers-master.Editor.csproj", "{22085D55-AA72-0519-EAA7-7F460E619842}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE4D8F42-A790-F8AD-7BB7-4F0828920F98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE4D8F42-A790-F8AD-7BB7-4F0828920F98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE4D8F42-A790-F8AD-7BB7-4F0828920F98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE4D8F42-A790-F8AD-7BB7-4F0828920F98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22085D55-AA72-0519-EAA7-7F460E619842}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22085D55-AA72-0519-EAA7-7F460E619842}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22085D55-AA72-0519-EAA7-7F460E619842}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22085D55-AA72-0519-EAA7-7F460E619842}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

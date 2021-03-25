@@ -10,6 +10,9 @@ public class MoleScript : MonoBehaviour
     public GameObject cardTemplate;
     public Transform spawnPoint, midPoint, endPoint;
 
+    public KMAudio Audio;
+    public AudioClip[] audioClips;
+
     public KMBombModule Module;
     public KMSelectable LeftButton, RightButton, BadgerButton;
 
@@ -100,6 +103,7 @@ public class MoleScript : MonoBehaviour
         if (_solved) return false;
         if (CardsRight.Count == targetPos)
         {
+            Audio.PlaySoundAtTransform(audioClips.PickRandom().name, transform);
             _solved = true;
             Module.HandlePass();
         }

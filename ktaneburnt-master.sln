@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ktaneburnt-master", "ktaneburnt-master.csproj", "{579998AF-895E-00A2-9BE5-E85BDCB8881B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ktaneburnt-master.Editor", "ktaneburnt-master.Editor.csproj", "{BEF3D2B8-DD9E-91DC-A3B0-8C366ABED566}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{579998AF-895E-00A2-9BE5-E85BDCB8881B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{579998AF-895E-00A2-9BE5-E85BDCB8881B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{579998AF-895E-00A2-9BE5-E85BDCB8881B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{579998AF-895E-00A2-9BE5-E85BDCB8881B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEF3D2B8-DD9E-91DC-A3B0-8C366ABED566}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEF3D2B8-DD9E-91DC-A3B0-8C366ABED566}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEF3D2B8-DD9E-91DC-A3B0-8C366ABED566}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEF3D2B8-DD9E-91DC-A3B0-8C366ABED566}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

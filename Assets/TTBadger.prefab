@@ -867,6 +867,11 @@ MonoBehaviour:
   spawnPoint: {fileID: 4653449147130216}
   midPoint: {fileID: 4744634457835594}
   endPoint: {fileID: 4767581460441546}
+  Audio: {fileID: 114637089086849150}
+  audioClips:
+  - {fileID: 8300000, guid: 684235cd9ded1654e841980f3ba05ef1, type: 3}
+  - {fileID: 8300000, guid: 72f960b8891706749b6212dffeff449c, type: 3}
+  - {fileID: 8300000, guid: 88ee3c5960c2eaf4f965e1725a02f444, type: 3}
   Module: {fileID: 114134670686313578}
   LeftButton: {fileID: 114055207360860266}
   RightButton: {fileID: 114934471146349178}

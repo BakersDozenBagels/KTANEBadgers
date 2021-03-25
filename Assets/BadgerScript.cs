@@ -9,6 +9,9 @@ public class BadgerScript : MonoBehaviour
     public GameObject cardTemplate;
     public Transform spawnPoint, midPoint, endPoint;
 
+    public KMAudio Audio;
+    public AudioClip[] audioClips;
+
     public KMBombModule Module;
     public KMSelectable LeftButton, RightButton, BadgerButton;
 
@@ -55,6 +58,7 @@ public class BadgerScript : MonoBehaviour
         if (_solved) return false;
         if (CardsLeft.Count != 0 && CardsLeft.Peek().GetComponent<MeshRenderer>().material.mainTexture == goalCard)
         {
+            Audio.PlaySoundAtTransform(audioClips.PickRandom().name, transform);
             Module.HandlePass();
             _solved = true;
         }

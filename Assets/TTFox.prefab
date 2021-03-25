@@ -819,12 +819,16 @@ MonoBehaviour:
   - {fileID: 2800000, guid: ed929c18a0afc9449b54fef581e0e87d, type: 3}
   - {fileID: 2800000, guid: 5613fa799a4fef547b7b715863c6f68b, type: 3}
   - {fileID: 2800000, guid: 173b2343559a0584a8e4182128e2c9e1, type: 3}
-  goalCard: {fileID: 0}
   cardTemplate: {fileID: 1178193422643372, guid: c2a12ce60bcce7843aa948f7f9fcfd18,
     type: 2}
   spawnPoint: {fileID: 4324485830153648}
   midPoint: {fileID: 4835225039262938}
   endPoint: {fileID: 4601914461144054}
+  Audio: {fileID: 114283133998076990}
+  audioClips:
+  - {fileID: 8300000, guid: 418ec1cb63854274dbbb961302031aec, type: 3}
+  - {fileID: 8300000, guid: 9173c8fe0ac966044bfa5033b96de587, type: 3}
+  - {fileID: 8300000, guid: 2ee1b60892997b9468ba43d7d9b70712, type: 3}
   Module: {fileID: 114951074549230710}
   LeftButton: {fileID: 114304663715240796}
   RightButton: {fileID: 114106815911523970}
