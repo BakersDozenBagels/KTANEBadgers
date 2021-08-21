@@ -145,10 +145,10 @@ public class BadgerBossScript : MonoBehaviour
         _stageActionCounts = actionsPerSolve;
         _stageActions = stages;
 
-        BuzzInMode();
-
         _audio.PlayStackable(initialState.CurrentPlayOrder == GameState.PlayOrder.Clockwise ? "StartClockwise" : "StartCounterClockwise");
         _currentState = initialState;
+
+        BuzzInMode();
     }
 
     private List AddStage(int attempt, GameState state, Condition[] conds)
