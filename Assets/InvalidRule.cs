@@ -25,7 +25,7 @@ namespace BadgerBoss
 
         public override Condition[] GetConditions()
         {
-            List<Condition> conditions = new Condition[] { new Condition(g => _triggerA.Applies(g, g.Hands.PickRandom().Cards.PickRandom()), 10) }.ToList();
+            List<Condition> conditions = new Condition[] { new Condition(g => { Hand h = g.Hands.Where(hn => hn.Cards.Count > 0).PickRandom(); return _triggerA.Applies(g, h.Cards.PickRandom()); }, 10) }.ToList();
             return conditions.ToArray();
         }
 

@@ -130,6 +130,8 @@ GameObject:
   - component: {fileID: 114656485408608508}
   - component: {fileID: 114663058236106790}
   - component: {fileID: 114208869337739942}
+  - component: {fileID: 114526357549778828}
+  - component: {fileID: 114878155837101420}
   m_Layer: 0
   m_Name: TTBadger
   m_TagString: Untagged
@@ -1253,6 +1255,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightScale: {x: 1, y: 1, z: 1}
   OutlineAmount: 0
+--- !u!114 &114526357549778828
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1484975964243930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -271661043, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114541004185337006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1325,6 +1338,24 @@ MonoBehaviour:
   m_Script: {fileID: -381104716, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114878155837101420
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1484975964243930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1452013704, guid: daa58e1d82e047c41ae7c7b771c2c9eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isSFX: 1
+  _audioClips:
+  - {fileID: 8300000, guid: d9f70d389ad07784ebe04d1dfa7c2da0, type: 3}
+  - {fileID: 8300000, guid: 4fa5453a08f0ae146be940add45211f8, type: 3}
+  - {fileID: 8300000, guid: cd4e978ad178a6c44aeff63e8539e7cc, type: 3}
+  - {fileID: 8300000, guid: bdbcb4e471c056443ada3830b86b284f, type: 3}
+  _audioSource: {fileID: 0}
 --- !u!114 &114890069171959150
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1439,11 +1470,14 @@ MonoBehaviour:
   _downButton: {fileID: 114993872212889776}
   _foxButton: {fileID: 114040392374352976}
   _audio: {fileID: 114208869337739942}
+  _audio2: {fileID: 114878155837101420}
   _cardPrefab: {fileID: 1523330293741250, guid: bac2b586e23c4fc4d98e70fa4b8ba40c,
     type: 2}
   _cardSpawn: {fileID: 4049731389841300}
   _cardGoal: {fileID: 4116789865226694}
   _deck: {fileID: 1849198926110606}
+  _gameInfo: {fileID: 114526357549778828}
+  _light: {fileID: 1717310285102418}
 --- !u!114 &114930678152307996
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -132,6 +132,11 @@ namespace BadgerBoss
                 cl.changes.Add(new Change { CardDrawn = state.CurrentPlayer });
                 cl.changes.Add(new Change { CardDrawn = state.CurrentPlayer });
                 cl.changes.Add(new Change { CardDrawn = state.CurrentPlayer });
+                state.CurrentHand.Cards.Add(state.Deck.Pop());
+                state.CurrentHand.Cards.Add(state.Deck.Pop());
+                state.CurrentHand.Cards.Add(state.Deck.Pop());
+                state.CurrentHand.Cards.Add(state.Deck.Pop());
+                state.CurrentHand.Cards.Add(state.Deck.Pop());
             }
 
             state.CurrentHand.Cards.Remove(card);

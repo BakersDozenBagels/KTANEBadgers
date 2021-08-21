@@ -19,13 +19,17 @@ public class BadgerBossScript : MonoBehaviour
     [SerializeField]
     private KMSelectable _badgerButton, _leftButton, _rightButton, _downButton, _foxButton;
     [SerializeField]
-    private AudioScript _audio;
+    private AudioScript _audio, _audio2;
     [SerializeField]
     private GameObject _cardPrefab;
     [SerializeField]
     private Transform _cardSpawn, _cardGoal;
     [SerializeField]
     private GameObject _deck;
+    [SerializeField]
+    private KMGameInfo _gameInfo;
+    [SerializeField]
+    private GameObject _light;
 
     private List<Rule> _rules = new List<Rule>();
     private List<Card> _possibleCards = new List<Card>();
@@ -44,6 +48,8 @@ public class BadgerBossScript : MonoBehaviour
     private float _lastPressTime;
     private int _correctPlays;
     private bool _foxPressed = false;
+    private bool _requestedReplay = false;
+
     private const float MAXSOLVEPERCENTAGE = 0.85f;
     private const float MINSOLVEPERCENTAGE = 0.65f;
     private const int MAXACTIONSPERSTAGE = 30;
@@ -52,7 +58,7 @@ public class BadgerBossScript : MonoBehaviour
 
     private void Start()
     {
-        GetComponentInChildren<Light>().transform.localScale *= transform.lossyScale.x;
+        _light.transform.localScale *= transform.lossyScale.x;
         _id = ++_idCounter;
         int attempt = 1;
         for(int i = 0; i < _possibleCardTextures.Length; i++)
@@ -145,7 +151,7 @@ public class BadgerBossScript : MonoBehaviour
         _stageActionCounts = actionsPerSolve;
         _stageActions = stages;
 
-        _audio.PlayStackable(initialState.CurrentPlayOrder == GameState.PlayOrder.Clockwise ? "StartClockwise" : "StartCounterClockwise");
+        _audio2.PlayStackable(initialState.CurrentPlayOrder == GameState.PlayOrder.Clockwise ? "StartClockwise" : "StartCounterClockwise");
         _currentState = initialState;
 
         BuzzInMode();
@@ -189,6 +195,9 @@ public class BadgerBossScript : MonoBehaviour
     {
         StartCoroutine(WatchForSolves());
         _badgerButton.OnInteract += () => { if(_hasBuzzed || _info.GetSolvedModuleIDs().Count < 1) return false; _hasBuzzed = true; PlayingMode(); return false; };
+        _downButton.OnInteract += () => { if(_hasBuzzed) return false; _requestedReplay = true; return false; };
+
+        _gameInfo.OnLightsChange += (a) => { _light.SetActive(!a); };
     }
 
     private void PlayingMode()
@@ -218,7 +227,7 @@ public class BadgerBossScript : MonoBehaviour
             Debug.LogFormat("[That's The Badger #{0}] You drew a {1}.", _id, _currentState.Hands[3].Cards[i]);
             StartCoroutine(MoveObjectThenAction(c, vec, .75f, () => { StartCoroutine(Flip(c, 0.25f)); }));
         }
-        _audio.PlayStackable("CardDraw");
+        _audio2.PlayStackable("CardDraw");
         yield return new WaitForSeconds(1f);
         _badgerButton.OnInteract += () => { if(_isSolved) return false; PlayCard(); return false; };
         _leftButton.OnInteract += () => { if(_isSolved) return false; SelectNext(true); return false; };
@@ -416,6 +425,17 @@ public class BadgerBossScript : MonoBehaviour
                 currentlySolved++;
                 _currentState = _futureStates[_stageActionCounts.Take(currentlySolved).Sum()];
             }
+            if(_requestedReplay && currentlySolved > 0)
+            {
+                yield return new WaitForSeconds(DELAY);
+                IEnumerable<List> cls = _stageActions.Skip(_stageActionCounts.Take(currentlySolved - 1).Sum()).Take(_stageActionCounts[currentlySolved - 1]);
+                foreach(List cl in cls)
+                {
+                    foreach(object e in PlayChanges(cl))
+                        yield return e;
+                }
+                _requestedReplay = false;
+            }
             yield return new WaitForSeconds(0.1f);
         }
     }
@@ -485,7 +505,7 @@ public class BadgerBossScript : MonoBehaviour
                 break;
         }
         StartCoroutine(MoveObjectThenAction(c, vec, .75f, () => { Destroy(c); }));
-        _audio.PlayStackable("CardDraw");
+        _audio2.PlayStackable("CardDraw");
         if(cardDrawn == 3)
             RefreshHand();
     }
