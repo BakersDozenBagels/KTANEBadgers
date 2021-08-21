@@ -165,9 +165,9 @@ public static class BeaverExtensions
     {
         bool outBool = true;
         if ((mode & BeaverMode.Uno) == BeaverMode.Uno)
-            outBool &= played.Rank == prev.Rank || played.Suit == prev.Suit;
+            outBool &= played.Rank == prev.Rank || played.CardSuit == prev.CardSuit;
         if ((mode & BeaverMode.AntiUno) == BeaverMode.AntiUno)
-            outBool &= played.Rank != prev.Rank && played.Suit != prev.Suit;
+            outBool &= played.Rank != prev.Rank && played.CardSuit != prev.CardSuit;
         if ((mode & BeaverMode.Up) == BeaverMode.Up)
             outBool &= played.Rank >= prev.Rank || prev.Rank >= 11;
         if ((mode & BeaverMode.Down) == BeaverMode.Down)

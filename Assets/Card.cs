@@ -1,20 +1,36 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public class Card
+[Serializable]
+public struct Card
 {
-    public Texture Texture { get; set; }
-    public int Rank { get; set; }
-    public int Suit { get; set; }
+    public Texture Texture;
+    public int Rank;
+    public Suit CardSuit;
 
     public Card(Texture Texture, int Rank, int Suit)
     {
         this.Texture = Texture;
         this.Rank = Rank;
-        this.Suit = Suit;
+        this.CardSuit = (Suit)Suit;
     }
 
     public override string ToString()
     {
-        return string.Format("{0} of {1}", Rank, Suit);
+        return string.Format("{0} of {1}", Rank, CardSuit);
+    }
+
+    public enum Suit
+    {
+        Clubs,
+        Diamonds,
+        Hearts,
+        Spades,
+        None
+    }
+
+    internal static Card Random()
+    {
+        return new Card(null, UnityEngine.Random.Range(1, 14), UnityEngine.Random.Range(0, 4));
     }
 }

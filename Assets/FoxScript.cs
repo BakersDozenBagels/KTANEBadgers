@@ -159,6 +159,6 @@ public static class FoxExtensions
 
     public static bool FoxCheck(Card prev, Card played)
     {
-        return (played.Rank == prev.Rank) || (prev.Rank >= 11 && played.Suit == prev.Suit) || (played.Rank > prev.Rank && played.Suit == prev.Suit);
+        return (played.Rank == prev.Rank) || (prev.Rank >= 11 && played.CardSuit == prev.CardSuit) || (played.Rank > prev.Rank && played.CardSuit == prev.CardSuit);
     }
 }

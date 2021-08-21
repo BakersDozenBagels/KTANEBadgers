@@ -178,21 +178,21 @@ public static class MoleExtensions
         if (mode == MoleMode.None)
             outBool &= true;
         if ((mode & MoleMode.Uno) == MoleMode.Uno)
-            outBool &= played.Rank == on.Rank || played.Suit == on.Suit;
+            outBool &= played.Rank == on.Rank || played.CardSuit == on.CardSuit;
         if ((mode & MoleMode.AntiUno) == MoleMode.AntiUno)
-            outBool &= played.Rank != on.Rank && played.Suit != on.Suit;
+            outBool &= played.Rank != on.Rank && played.CardSuit != on.CardSuit;
         if ((mode & MoleMode.Up) == MoleMode.Up)
             outBool &= played.Rank >= on.Rank || on.Rank >= 11;
         if ((mode & MoleMode.Down) == MoleMode.Down)
             outBool &= played.Rank <= on.Rank || played.Rank >= 11;
         if ((mode & MoleMode.Right1) == MoleMode.Right1)
-            outBool &= played.Suit == on.Suit || played.Suit == (on.Suit + 1) % 8 || played.Rank == on.Rank;
+            outBool &= played.CardSuit == on.CardSuit || (int)played.CardSuit == ((int)on.CardSuit + 1) % 8 || played.Rank == on.Rank;
         if ((mode & MoleMode.Right3) == MoleMode.Right3)
-            outBool &= played.Suit == on.Suit || played.Suit == (on.Suit + 3) % 8 || played.Rank == on.Rank;
+            outBool &= played.CardSuit == on.CardSuit || (int)played.CardSuit == ((int)on.CardSuit + 3) % 8 || played.Rank == on.Rank;
         if ((mode & MoleMode.Right5) == MoleMode.Right5)
-            outBool &= played.Suit == on.Suit || played.Suit == (on.Suit + 5) % 8 || played.Rank == on.Rank;
+            outBool &= played.CardSuit == on.CardSuit || (int)played.CardSuit == ((int)on.CardSuit + 5) % 8 || played.Rank == on.Rank;
         if ((mode & MoleMode.Right7) == MoleMode.Right7)
-            outBool &= played.Suit == on.Suit || played.Suit == (on.Suit + 7) % 8 || played.Rank == on.Rank;
+            outBool &= played.CardSuit == on.CardSuit || (int)played.CardSuit == ((int)on.CardSuit + 7) % 8 || played.Rank == on.Rank;
         return outBool;
     }
 
