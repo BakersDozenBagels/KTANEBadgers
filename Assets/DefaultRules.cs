@@ -19,10 +19,10 @@ namespace BadgerBoss
             return (state.CalledSuit == Card.Suit.None ? state.LastPlayed.CardSuit : state.CalledSuit) == card.CardSuit || state.LastPlayed.Rank == card.Rank;
         }
 
-        public override List ModifyState(GameState state, Card card, List previous)
+        public override ChangeList ModifyState(GameState state, Card card, ChangeList previous)
         {
             state.CalledSuit = Card.Suit.None;
-            List cl = new List();
+            ChangeList cl = new ChangeList();
 
             cl.changes.Add(new Change { CardPlayed = new Play(state.CurrentPlayer, card) });
 
@@ -141,13 +141,13 @@ namespace BadgerBoss
 
             state.CurrentHand.Cards.Remove(card);
             state.PlayPile.Push(card);
-            cl = List.CombineDefault(previous, cl);
+            cl = ChangeList.CombineDefault(previous, cl);
             return cl;
         }
 
-        public override List ModifyState(GameState state, List previous)
+        public override ChangeList ModifyState(GameState state, ChangeList previous)
         {
-            List cl = new List();
+            ChangeList cl = new ChangeList();
             for(int s = 0; s < state.StackedSevens; s++)
             {
                 cl.changes.Add(new Change { PhraseSaid = new[] { Phrase.PenaltyCard, Phrase.None, Phrase.None } });

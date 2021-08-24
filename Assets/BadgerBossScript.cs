@@ -39,7 +39,7 @@ public class BadgerBossScript : MonoBehaviour
     private static int _idCounter;
 
     private static List<int> _stageActionCounts;
-    private static List<List> _stageActions;
+    private static List<ChangeList> _stageActions;
     private bool _isSolved, _hasBuzzed, _donePlaying;
     private static string[] _ignored;
     private int _cardsInStack, _selectedCard;
@@ -91,7 +91,7 @@ public class BadgerBossScript : MonoBehaviour
         GameState state = GameState.NewShuffle(Enumerable.Repeat(_possibleCards, 10).SelectMany(a => a));
         Debug.LogFormat("<That's The Badger #{0}> Rule generation attempt #{1}: Generated gamestate is: {2}.", _id, attempt, state);
         GameState initialState = state.DeepCopy();
-        List<List> stages = new List<List>();
+        List<ChangeList> stages = new List<ChangeList>();
         Condition[] conds = _rules.SelectMany(r => r.GetConditions()).ToArray();
         _futureStates = new List<GameState>() { initialState };
         while(!conds.All(c => c.Count <= 0)) // Rule is currently ambiguous TODO: make this a bit better
@@ -116,14 +116,8 @@ public class BadgerBossScript : MonoBehaviour
         float actionsPerStage = stages.Count / (stageCount * targetSolvePercent);
         List<int> actionsPerSolve = new List<int>();
         for(int i = 0; i < stageCount; i++)
-            actionsPerSolve.Add(RNG.Range(Mathf.FloorToInt(actionsPerStage), Mathf.CeilToInt(actionsPerStage)));
+            actionsPerSolve.Add(Mathf.FloorToInt(actionsPerStage));
 
-        while(actionsPerSolve.Sum() > stages.Count)
-        {
-            int randIx = RNG.Range(0, actionsPerSolve.Count);
-            if(actionsPerSolve[randIx] > MINACTIONSPERSTAGE)
-                actionsPerSolve[randIx]--;
-        }
         while(actionsPerSolve.Sum() < stages.Count)
         {
             int randIx = RNG.Range(0, actionsPerSolve.Count);
@@ -133,7 +127,7 @@ public class BadgerBossScript : MonoBehaviour
 
         int totalPossibleStages = _info.GetSolvableModuleNames().Count;
         while(actionsPerSolve.Count < totalPossibleStages)
-            actionsPerSolve.Add(RNG.Range(Mathf.FloorToInt(actionsPerStage), Mathf.CeilToInt(actionsPerStage)));
+            actionsPerSolve.Add(RNG.Range(Mathf.FloorToInt(actionsPerStage), Mathf.CeilToInt(actionsPerStage) + 1));
 
         while(stages.Count < actionsPerSolve.Sum())
             stages.Add(AddStage(attempt, state, null));
@@ -157,10 +151,10 @@ public class BadgerBossScript : MonoBehaviour
         BuzzInMode();
     }
 
-    private List AddStage(int attempt, GameState state, Condition[] conds)
+    private ChangeList AddStage(int attempt, GameState state, Condition[] conds)
     {
         IEnumerable<Card> validCards = state.Hands[state.CurrentPlayer].Cards.Where(c => _rules.All(r => r.IsValid(state, c)));
-        List cl = new List();
+        ChangeList cl = new ChangeList();
         if(validCards.Count() > 0)
         {
             Card nextToPlay = validCards.PickRandom();
@@ -197,7 +191,7 @@ public class BadgerBossScript : MonoBehaviour
         _badgerButton.OnInteract += () => { if(_hasBuzzed || _info.GetSolvedModuleIDs().Count < 1) return false; _hasBuzzed = true; PlayingMode(); return false; };
         _downButton.OnInteract += () => { if(_hasBuzzed) return false; _requestedReplay = true; return false; };
 
-        _gameInfo.OnLightsChange += (a) => { _light.SetActive(!a); };
+        _gameInfo.OnLightsChange += a => _light.SetActive(!a);
     }
 
     private void PlayingMode()
@@ -259,7 +253,7 @@ public class BadgerBossScript : MonoBehaviour
             _foxPressed = false;
             return;
         }
-        List cl = new List();
+        ChangeList cl = new ChangeList();
         Debug.LogFormat("[That's The Badger #{0}] You passed.", _id);
         foreach(Rule r in _rules)
             cl = r.ModifyState(_currentState, cl);
@@ -299,7 +293,7 @@ public class BadgerBossScript : MonoBehaviour
             return;
         }
         IEnumerable<Card> validCards = _currentState.Hands[_currentState.CurrentPlayer].Cards.Where(c => _rules.All(r => r.IsValid(_currentState, c)));
-        List cl = new List();
+        ChangeList cl = new ChangeList();
         if(validCards.Count() > 0)
         {
             Card nextToPlay = validCards.PickRandom();
@@ -333,7 +327,7 @@ public class BadgerBossScript : MonoBehaviour
         }
         if(_rules.All(r => r.IsValid(_currentState, _currentState.Hands[3].Cards[_selectedCard])))
         {
-            List cl = new List();
+            ChangeList cl = new ChangeList();
 
             Card nextToPlay = _currentState.Hands[3].Cards[_selectedCard];
             Debug.LogFormat("[That's The Badger #{0}] You are playing a {1}.", _id, nextToPlay);
@@ -416,8 +410,8 @@ public class BadgerBossScript : MonoBehaviour
             for(int i = 0; i < newSolves; i++)
             {
                 yield return new WaitForSeconds(DELAY);
-                IEnumerable<List> cls = _stageActions.Skip(_stageActionCounts.Take(currentlySolved).Sum()).Take(_stageActionCounts[currentlySolved]);
-                foreach(List cl in cls)
+                IEnumerable<ChangeList> cls = _stageActions.Skip(_stageActionCounts.Take(currentlySolved).Sum()).Take(_stageActionCounts[currentlySolved]);
+                foreach(ChangeList cl in cls)
                 {
                     foreach(object e in PlayChanges(cl))
                         yield return e;
@@ -428,8 +422,8 @@ public class BadgerBossScript : MonoBehaviour
             if(_requestedReplay && currentlySolved > 0)
             {
                 yield return new WaitForSeconds(DELAY);
-                IEnumerable<List> cls = _stageActions.Skip(_stageActionCounts.Take(currentlySolved - 1).Sum()).Take(_stageActionCounts[currentlySolved - 1]);
-                foreach(List cl in cls)
+                IEnumerable<ChangeList> cls = _stageActions.Skip(_stageActionCounts.Take(currentlySolved - 1).Sum()).Take(_stageActionCounts[currentlySolved - 1]);
+                foreach(ChangeList cl in cls)
                 {
                     foreach(object e in PlayChanges(cl))
                         yield return e;
@@ -455,7 +449,7 @@ public class BadgerBossScript : MonoBehaviour
 
     private const float DELAY = .75f;
 
-    private IEnumerable PlayChanges(List changeList)
+    private IEnumerable PlayChanges(ChangeList changeList)
     {
         _donePlaying = false;
         foreach(Change c in changeList)

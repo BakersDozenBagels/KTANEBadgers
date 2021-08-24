@@ -2,8 +2,8 @@
 {
     public abstract class Rule
     {
-        public abstract List ModifyState(GameState state, Card card, List previous);
-        public abstract List ModifyState(GameState state, List previous);
+        public abstract ChangeList ModifyState(GameState state, Card card, ChangeList previous);
+        public abstract ChangeList ModifyState(GameState state, ChangeList previous);
 
         public abstract bool IsValid(GameState state, Card card);
 

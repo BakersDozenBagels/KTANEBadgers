@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BadgerBoss
 {
-    public sealed class List : IList<Change>
+    public sealed class ChangeList : IList<Change>
     {
         public readonly List<Change> changes = new List<Change>();
 
@@ -30,7 +30,7 @@ namespace BadgerBoss
             }
         }
 
-        public static List CombineDefault(List a, List b)
+        public static ChangeList CombineDefault(ChangeList a, ChangeList b)
         {
             if(a == null)
                 return b;

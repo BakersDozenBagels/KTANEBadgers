@@ -12,12 +12,12 @@ namespace BadgerBoss
         public static InvalidRule Random()
         {
             List<CardTrigger> triggers = new CardTrigger[] {
-                new CardTrigger((g,c) => { return g.CurrentHand.Cards.Count == c.Rank; }, "Rank = Cards In Hand"),
-                new CardTrigger((g,c) => { return g.Deck.Count == c.Rank; }, "Rank = Deck"),
-                new CardTrigger((g,c) => { return g.PlayPile.Count == c.Rank; }, "Rank = PlayPile "),
-                new CardTrigger((g,c) => { return (int)g.BeforeLastPlayed.CardSuit == (c.Rank - 1) % 4; }, "Rank = Previous Suit"),
-                new CardTrigger((g,c) => { return (g.BeforeLastPlayed.Rank - 1) % 4 == (int)c.CardSuit; }, "Suit = Previous Rank"),
-                new CardTrigger((g,c) => { return (g.BeforeLastPlayed.Rank) % 2 == c.Rank % 2 && !(g.BeforeLastPlayed.Rank == 7 && c.Rank == 7); }, "Same Rank Parity (Except 7s)"),
+                new CardTrigger((g,c) => g.CurrentHand.Cards.Count == c.Rank, "Rank = Cards In Hand"),
+                new CardTrigger((g,c) => g.Deck.Count == c.Rank, "Rank = Deck"),
+                new CardTrigger((g,c) => g.PlayPile.Count == c.Rank, "Rank = PlayPile "),
+                new CardTrigger((g,c) => (int)g.BeforeLastPlayed.CardSuit == (c.Rank - 1) % 4, "Rank = Previous Suit"),
+                new CardTrigger((g,c) => (g.BeforeLastPlayed.Rank - 1) % 4 == (int)c.CardSuit, "Suit = Previous Rank"),
+                new CardTrigger((g,c) => (g.BeforeLastPlayed.Rank) % 2 == c.Rank % 2 && !(g.BeforeLastPlayed.Rank == 7 && c.Rank == 7), "Same Rank Parity (Except 7s)"),
             }.ToList();
             CardTrigger triggerA = triggers.PickRandom();
             return new InvalidRule() { _triggerA = triggerA };
@@ -34,12 +34,12 @@ namespace BadgerBoss
             return !_triggerA.Applies(state, card);
         }
 
-        public override List ModifyState(GameState state, Card card, List previous)
+        public override ChangeList ModifyState(GameState state, Card card, ChangeList previous)
         {
             return previous;
         }
 
-        public override List ModifyState(GameState state, List previous)
+        public override ChangeList ModifyState(GameState state, ChangeList previous)
         {
             return previous;
         }

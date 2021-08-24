@@ -48,7 +48,7 @@ namespace BadgerBoss
 
         public static GameState NewShuffle(IEnumerable<Card> cards)
         {
-            cards = cards.OrderBy(c => UnityEngine.Random.Range(0, int.MaxValue));
+            cards = cards.OrderBy(c => UnityEngine.Random.Range(0, int.MaxValue)).ToArray();
             GameState g = new GameState(new Stack<Card>(cards.Skip(16)), new Stack<Card>(cards.Take(1)));
             string[] names = GetRandomNames(3);
             g.Hands = new Hand[] { new Hand(names[0], cards.Skip(1).Take(5)), new Hand(names[1], cards.Skip(6).Take(5)), new Hand(names[2], cards.Skip(11).Take(5)) };
