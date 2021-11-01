@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using System.Text.RegularExpressions;
 
 public class MoleScript : MonoBehaviour
 {
@@ -151,6 +152,52 @@ public class MoleScript : MonoBehaviour
             time += Time.deltaTime;
             card.transform.localPosition = new Vector3(Mathf.Lerp(midPoint.localPosition.x, spawnPoint.localPosition.x, time * 4f), Mathf.Lerp(midPoint.localPosition.y, spawnPoint.localPosition.y + end, time * 4f), Mathf.Lerp(midPoint.localPosition.z, spawnPoint.localPosition.z, time * 4f));
             card.transform.localRotation = Quaternion.Lerp(midPoint.localRotation, spawnPoint.localRotation, time * 4f);
+        }
+    }
+
+#pragma warning disable 414
+    private const string TwitchHelpMessage = "\"!{0} l\" to press the left arrow. \"!{0} r\" to press the right arrow. \"!{0} s\" to submit.";
+#pragma warning restore 414
+
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        Match m;
+        if((m = Regex.Match(command, "(?:(?:press|push|tap)\\s+)?(l|r|s|left|right|submit|mole)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)).Success)
+        {
+            yield return null;
+            switch(m.Groups[1].Value.ToLowerInvariant())
+            {
+                case "left":
+                case "l":
+                    LeftButton.OnInteract();
+                    break;
+                case "right":
+                case "r":
+                    RightButton.OnInteract();
+                    break;
+                case "submit":
+                case "mole":
+                case "s":
+                    BadgerButton.OnInteract();
+                    break;
+            }
+        }
+    }
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        while(!_solved)
+        {
+            while(CardsRight.Count > targetPos)
+            {
+                LeftButton.OnInteract();
+                yield return new WaitForSeconds(0.1f);
+            }
+            while(CardsRight.Count < targetPos)
+            {
+                RightButton.OnInteract();
+                yield return new WaitForSeconds(0.1f);
+            }
+            BadgerButton.OnInteract();
         }
     }
 }
