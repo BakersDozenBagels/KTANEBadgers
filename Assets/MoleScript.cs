@@ -162,7 +162,7 @@ public class MoleScript : MonoBehaviour
     IEnumerator ProcessTwitchCommand(string command)
     {
         Match m;
-        if((m = Regex.Match(command, "(?:(?:press|push|tap)\\s+)?(l|r|s|left|right|submit|mole)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)).Success)
+        if((m = Regex.Match(command, "^\\s*(?:(?:press|push|tap)\\s+)?(l|r|s|left|right|submit|mole)\\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)).Success)
         {
             yield return null;
             switch(m.Groups[1].Value.ToLowerInvariant())
