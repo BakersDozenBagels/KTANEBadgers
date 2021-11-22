@@ -26,6 +26,8 @@ public class MoleScript : MonoBehaviour
     private int targetPos;
 
     private MoleExtensions.MoleMode mode = MoleExtensions.MoleMode.None;
+    private static int _idc;
+    private int _id = ++_idc;
 
     // Use this for initialization
     void Start()
@@ -77,6 +79,9 @@ public class MoleScript : MonoBehaviour
             CardsRight.Peek().GetComponent<MeshRenderer>().material.mainTexture = Cards[i].Texture;
             CardsRight.Peek().transform.localEulerAngles = new Vector3(90f, 0f, 180f);
         }
+
+        Debug.LogFormat("[That's The Mole #{0}] Generated deck: {1}", _id, Cards.Join(", "));
+        Debug.LogFormat("[That's The Mole #{0}] Generated solution: {1}", _id, Cards.Count - targetPos);
 
         LeftButton.OnInteract += Left;
         RightButton.OnInteract += Right;

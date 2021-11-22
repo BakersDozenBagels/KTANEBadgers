@@ -24,23 +24,25 @@ public class FoxScript : MonoBehaviour
 
     private List<Card> Cards = new List<Card>();
     private int targetPos;
+    private static int _idc;
+    private int _id = ++_idc;
 
     // Use this for initialization
     void Start()
     {
         Cards = new List<Card>();
-        for (int i = 0; i < cardTextures.Length; i++)
+        for(int i = 0; i < cardTextures.Length; i++)
             Cards.Add(new Card(cardTextures[i], ((i + 1) % 13) + 1, i / 13));
 
         Cards = Cards.FoxShuffle();
 
-        while (true)
+        while(true)
         {
             Texture targetTexture = cardTextures.PickRandom();
             Card target = new Card(targetTexture, ((Array.IndexOf(cardTextures, targetTexture) + 1) % 13) + 1, Mathf.FloorToInt(Array.IndexOf(cardTextures, targetTexture) / 13));
-            for (int i = Cards.Count() - 2; i >= 0; i--)
+            for(int i = Cards.Count() - 2; i >= 0; i--)
             {
-                if (!FoxExtensions.FoxCheck(target, Cards[i]) && !FoxExtensions.FoxCheck(Cards[i + 1], target))
+                if(!FoxExtensions.FoxCheck(target, Cards[i]) && !FoxExtensions.FoxCheck(Cards[i + 1], target))
                 {
                     Cards.Insert(i + 1, target);
                     targetPos = i + 1;
@@ -50,13 +52,16 @@ public class FoxScript : MonoBehaviour
         }
         done:
 
-        for (int i = 0; i < Cards.Count; i++)
+        for(int i = 0; i < Cards.Count; i++)
         {
             CardsRight.Push(Instantiate(cardTemplate, spawnPoint.position, spawnPoint.rotation, transform));
             CardsRight.Peek().transform.localPosition = new Vector3(CardsRight.Peek().transform.localPosition.x, CardsRight.Peek().transform.localPosition.y + i * VOFFSET, CardsRight.Peek().transform.localPosition.z);
             CardsRight.Peek().GetComponent<MeshRenderer>().material.mainTexture = Cards[i].Texture;
             CardsRight.Peek().transform.localEulerAngles = new Vector3(90f, 0f, 180f);
         }
+
+        Debug.LogFormat("[That's The Fox #{0}] Generated deck: {1}", _id, Cards.Join(", "));
+        Debug.LogFormat("[That's The Fox #{0}] Generated solution: {1}", _id, Cards.Count - targetPos);
 
         LeftButton.OnInteract += Left;
         RightButton.OnInteract += Right;
@@ -65,7 +70,7 @@ public class FoxScript : MonoBehaviour
 
     private bool Left()
     {
-        if (CardsRight.Count == 0) return false;
+        if(CardsRight.Count == 0) return false;
         StartCoroutine(MoveLeft(CardsRight.Peek(), CardsRight.Count * VOFFSET - VOFFSET, CardsLeft.Count * VOFFSET));
         CardsLeft.Push(CardsRight.Pop());
         return false;
@@ -73,7 +78,7 @@ public class FoxScript : MonoBehaviour
 
     private bool Right()
     {
-        if (CardsLeft.Count == 0) return false;
+        if(CardsLeft.Count == 0) return false;
         StartCoroutine(MoveRight(CardsLeft.Peek(), CardsLeft.Count * VOFFSET - VOFFSET, CardsRight.Count * VOFFSET));
         CardsRight.Push(CardsLeft.Pop());
         return false;
@@ -81,8 +86,8 @@ public class FoxScript : MonoBehaviour
 
     private bool Badger()
     {
-        if (_solved) return false;
-        if (CardsRight.Count == targetPos)
+        if(_solved) return false;
+        if(CardsRight.Count == targetPos)
         {
             Audio.PlaySoundAtTransform(audioClips.PickRandom().name, transform);
             _solved = true;
@@ -98,7 +103,7 @@ public class FoxScript : MonoBehaviour
     private IEnumerator MoveLeft(GameObject card, float start, float end)
     {
         float time = 0f;
-        while (time < 0.25f)
+        while(time < 0.25f)
         {
             yield return null;
             time += Time.deltaTime;
@@ -106,7 +111,7 @@ public class FoxScript : MonoBehaviour
             card.transform.localRotation = Quaternion.Lerp(spawnPoint.localRotation, midPoint.localRotation, time * 4f);
         }
         time = 0f;
-        while (time < 0.25f)
+        while(time < 0.25f)
         {
             yield return null;
             time += Time.deltaTime;
@@ -118,7 +123,7 @@ public class FoxScript : MonoBehaviour
     private IEnumerator MoveRight(GameObject card, float start, float end)
     {
         float time = 0f;
-        while (time < 0.25f)
+        while(time < 0.25f)
         {
             yield return null;
             time += Time.deltaTime;
@@ -126,7 +131,7 @@ public class FoxScript : MonoBehaviour
             card.transform.localRotation = Quaternion.Lerp(endPoint.localRotation, midPoint.localRotation, time * 4f);
         }
         time = 0f;
-        while (time < 0.25f)
+        while(time < 0.25f)
         {
             yield return null;
             time += Time.deltaTime;
@@ -192,10 +197,10 @@ public static class FoxExtensions
         outList.Add(list.PickRandom());
         list.Remove(outList[0]);
 
-        while (outList.Count < 51)
+        while(outList.Count < 51)
         {
             var candidates = list.Where(c => FoxCheck(outList.Last(), c)).ToArray();
-            if (candidates.Length == 0)
+            if(candidates.Length == 0)
                 break;
             outList.Add(candidates.PickRandom());
             list.Remove(outList.Last());
