@@ -95,12 +95,14 @@ public class BeaverScript : MonoBehaviour
         if(_solved) return false;
         if(CardsRight.Count == targetPos)
         {
+            Debug.LogFormat("[That's The Beaver #{0}] Module solved.!", _id);
             Audio.PlaySoundAtTransform(audioClips.PickRandom().name, transform);
             _solved = true;
             Module.HandlePass();
         }
         else
         {
+            Debug.LogFormat("[That's The Beaver #{0}] You submitted {1}. Strike!", _id, Cards.Count - CardsRight.Count);
             Module.HandleStrike();
         }
         return false;

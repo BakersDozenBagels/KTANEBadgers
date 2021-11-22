@@ -774,6 +774,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardTextures:
+  - {fileID: 2800000, guid: d3907c097affae04aabdc472f633759a, type: 3}
+  - {fileID: 2800000, guid: 0348bf3e558b1564e8dd5bf6a255b618, type: 3}
+  - {fileID: 2800000, guid: 927d99fa172238146811cbf8689b440e, type: 3}
+  - {fileID: 2800000, guid: dda3f5b527af0d94fac7574dcb6d20b4, type: 3}
+  - {fileID: 2800000, guid: 86e5467023cb9a44ea4dda52837e6d8c, type: 3}
+  - {fileID: 2800000, guid: 6c2f2e2ef84ad7f4f99ed041a4e7ab6a, type: 3}
+  - {fileID: 2800000, guid: 567ea30e106900a4e8bd13f73aa6609a, type: 3}
+  - {fileID: 2800000, guid: 1619af27a9971ae4eb8139c6e3667df5, type: 3}
+  - {fileID: 2800000, guid: 421b61297a5d60648a5b3fe32de9173f, type: 3}
+  - {fileID: 2800000, guid: b347064848b8ad74490acca246d1c40e, type: 3}
+  - {fileID: 2800000, guid: 0332e580120c7e847ade81f6428f0307, type: 3}
+  - {fileID: 2800000, guid: 102892c69bf391947adcd1e8c194d94c, type: 3}
+  - {fileID: 2800000, guid: 5ec904ec1d02b8448983c1db112ee856, type: 3}
   - {fileID: 2800000, guid: 6f3973e87cc0e7c4ebbc3b09bb35cf33, type: 3}
   - {fileID: 2800000, guid: fdcfdebb9ffe746499d5f5f74beeb154, type: 3}
   - {fileID: 2800000, guid: da6bd965b83d35244adab6b0059b49ce, type: 3}
@@ -865,19 +878,6 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 5d65805a8da682543bea91ff614914ef, type: 3}
   - {fileID: 2800000, guid: ba049a091b80d8245b4cd77f105bd0fc, type: 3}
   - {fileID: 2800000, guid: 7a119c16046aec943b64b4b51e514aa0, type: 3}
-  - {fileID: 2800000, guid: d3907c097affae04aabdc472f633759a, type: 3}
-  - {fileID: 2800000, guid: 0348bf3e558b1564e8dd5bf6a255b618, type: 3}
-  - {fileID: 2800000, guid: 927d99fa172238146811cbf8689b440e, type: 3}
-  - {fileID: 2800000, guid: dda3f5b527af0d94fac7574dcb6d20b4, type: 3}
-  - {fileID: 2800000, guid: 86e5467023cb9a44ea4dda52837e6d8c, type: 3}
-  - {fileID: 2800000, guid: 6c2f2e2ef84ad7f4f99ed041a4e7ab6a, type: 3}
-  - {fileID: 2800000, guid: 567ea30e106900a4e8bd13f73aa6609a, type: 3}
-  - {fileID: 2800000, guid: 1619af27a9971ae4eb8139c6e3667df5, type: 3}
-  - {fileID: 2800000, guid: 421b61297a5d60648a5b3fe32de9173f, type: 3}
-  - {fileID: 2800000, guid: b347064848b8ad74490acca246d1c40e, type: 3}
-  - {fileID: 2800000, guid: 0332e580120c7e847ade81f6428f0307, type: 3}
-  - {fileID: 2800000, guid: 102892c69bf391947adcd1e8c194d94c, type: 3}
-  - {fileID: 2800000, guid: 5ec904ec1d02b8448983c1db112ee856, type: 3}
   cardTemplate: {fileID: 1523330293741250, guid: bac2b586e23c4fc4d98e70fa4b8ba40c,
     type: 2}
   spawnPoint: {fileID: 4144626012754308}

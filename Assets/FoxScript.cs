@@ -32,14 +32,14 @@ public class FoxScript : MonoBehaviour
     {
         Cards = new List<Card>();
         for(int i = 0; i < cardTextures.Length; i++)
-            Cards.Add(new Card(cardTextures[i], ((i + 1) % 13) + 1, i / 13));
+            Cards.Add(new Card(cardTextures[i], ((i + 1) % 13) + 1, i / 13 + 2));
 
         Cards = Cards.FoxShuffle();
 
         while(true)
         {
             Texture targetTexture = cardTextures.PickRandom();
-            Card target = new Card(targetTexture, ((Array.IndexOf(cardTextures, targetTexture) + 1) % 13) + 1, Mathf.FloorToInt(Array.IndexOf(cardTextures, targetTexture) / 13));
+            Card target = new Card(targetTexture, ((Array.IndexOf(cardTextures, targetTexture) + 1) % 13) + 1, Mathf.FloorToInt(Array.IndexOf(cardTextures, targetTexture) / 13) + 2);
             for(int i = Cards.Count() - 2; i >= 0; i--)
             {
                 if(!FoxExtensions.FoxCheck(target, Cards[i]) && !FoxExtensions.FoxCheck(Cards[i + 1], target))
@@ -89,12 +89,14 @@ public class FoxScript : MonoBehaviour
         if(_solved) return false;
         if(CardsRight.Count == targetPos)
         {
+            Debug.LogFormat("[That's The Fox #{0}] Module solved.", _id, CardsRight.Count);
             Audio.PlaySoundAtTransform(audioClips.PickRandom().name, transform);
             _solved = true;
             Module.HandlePass();
         }
         else
         {
+            Debug.LogFormat("[That's The Fox #{0}] You submitted {1}. Strike!", _id, Cards.Count - CardsRight.Count);
             Module.HandleStrike();
         }
         return false;

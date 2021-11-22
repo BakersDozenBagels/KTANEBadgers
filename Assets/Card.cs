@@ -22,10 +22,14 @@ public struct Card
 
     public enum Suit
     {
+        Bullets,
+        Orbs,
+        Spades,
+        Hearts,
         Clubs,
         Diamonds,
-        Hearts,
-        Spades,
+        Stars,
+        Nuts,
         None
     }
 
