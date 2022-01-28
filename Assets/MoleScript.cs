@@ -29,6 +29,8 @@ public class MoleScript : MonoBehaviour
     private static int _idc;
     private int _id = ++_idc;
 
+    private bool TwitchPlaysActive;
+
     // Use this for initialization
     void Start()
     {
@@ -60,7 +62,7 @@ public class MoleScript : MonoBehaviour
         {
             Texture targetTexture = cardTextures.PickRandom();
             Card target = new Card(targetTexture, ((Array.IndexOf(cardTextures, targetTexture) + 1) % 13) + 1, Mathf.FloorToInt(Array.IndexOf(cardTextures, targetTexture) / 13));
-            for (int i = Cards.Count() - 2; i >= 0; i--)
+            for (int i = TwitchPlaysActive ? 40 : Cards.Count() - 2; i >= 0; i--)
             {
                 if (!MoleExtensions.MoleCheck(mode, target, Cards[i + 1]) && !MoleExtensions.MoleCheck(mode, Cards[i], target))
                 {

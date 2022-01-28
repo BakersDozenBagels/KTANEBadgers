@@ -27,6 +27,8 @@ public class FoxScript : MonoBehaviour
     private static int _idc;
     private int _id = ++_idc;
 
+    private bool TwitchPlaysActive;
+
     // Use this for initialization
     void Start()
     {
@@ -40,7 +42,7 @@ public class FoxScript : MonoBehaviour
         {
             Texture targetTexture = cardTextures.PickRandom();
             Card target = new Card(targetTexture, ((Array.IndexOf(cardTextures, targetTexture) + 1) % 13) + 1, Mathf.FloorToInt(Array.IndexOf(cardTextures, targetTexture) / 13) + 2);
-            for(int i = Cards.Count() - 2; i >= 0; i--)
+            for(int i = TwitchPlaysActive ? 40 : Cards.Count() - 2; i >= 0; i--)
             {
                 if(!FoxExtensions.FoxCheck(target, Cards[i]) && !FoxExtensions.FoxCheck(Cards[i + 1], target))
                 {
