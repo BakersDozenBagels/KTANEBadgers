@@ -13,14 +13,12 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectGenerator>VSTU</UnityProjectGenerator>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2017.4.22f1</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion>4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -223,6 +221,9 @@
     <Reference Include="UnityEngine.SpatialTracking">
       <HintPath>C:/Program Files/UnityKtane/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
+    <Reference Include="KeepCoding">
+      <HintPath>Assets/Plugins/Managed/KeepCoding.dll</HintPath>
+    </Reference>
     <Reference Include="KMFramework">
       <HintPath>Assets/Plugins/Managed/KMFramework.dll</HintPath>
     </Reference>
@@ -237,9 +238,6 @@
     </Reference>
     <Reference Include="UnityEngine.StandardEvents">
       <HintPath>C:/Users/benja/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.standardevents@1.0.10/UnityEngine.StandardEvents.dll</HintPath>
-    </Reference>
-    <Reference Include="KeepCoding">
-      <HintPath>Assets/Plugins/Managed/KeepCoding.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -269,6 +267,7 @@
     <Compile Include="Assets\Phrase.cs" />
     <Compile Include="Assets\PhraseRule.cs" />
     <Compile Include="Assets\Play.cs" />
+    <Compile Include="Assets\ProtogenScript.cs" />
     <Compile Include="Assets\Rule.cs" />
     <Compile Include="Assets\RuleFactory.cs" />
     <Compile Include="Assets\Scripts\Easing.cs" />

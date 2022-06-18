@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-public class FoxScript : MonoBehaviour
+public class ProtogenScript : MonoBehaviour
 {
     public Texture[] cardTextures;
     public GameObject cardTemplate;
@@ -25,24 +25,29 @@ public class FoxScript : MonoBehaviour
     private List<Card> Cards = new List<Card>();
     private int targetPos;
     private static int _idc;
-    private int _id = ++_idc;
+    private readonly int _id = ++_idc;
+
+    private int _rule1, _rule2;
 
     // Use this for initialization
     void Start()
     {
+        _rule1 = UnityEngine.Random.Range(0, 3);
+        _rule2 = UnityEngine.Random.Range(0, 3);
+
         Cards = new List<Card>();
         for(int i = 0; i < cardTextures.Length; i++)
             Cards.Add(new Card(cardTextures[i], ((i + 1) % 13) + 1, i / 13 + 2));
 
-        Cards = Cards.FoxShuffle();
+        Cards = Shuffle(Cards);
 
         while(true)
         {
             Texture targetTexture = cardTextures.PickRandom();
             Card target = new Card(targetTexture, ((Array.IndexOf(cardTextures, targetTexture) + 1) % 13) + 1, Mathf.FloorToInt(Array.IndexOf(cardTextures, targetTexture) / 13) + 2);
-            for(int i = Cards.Count - 2; i >= Cards.Count - 40; i--)
+            for(int i = Cards.Count - UnityEngine.Random.Range(2, 11); i >= Cards.Count - 40; i--)
             {
-                if(!FoxExtensions.FoxCheck(target, Cards[i]) && !FoxExtensions.FoxCheck(Cards[i + 1], target))
+                if(!Check(target, Cards[i], Cards.Count - i) && !Check(target, Cards[i + 1], Cards.Count - (i + 1)))
                 {
                     Cards.Insert(i + 1, target);
                     targetPos = i + 1;
@@ -60,12 +65,68 @@ public class FoxScript : MonoBehaviour
             CardsRight.Peek().transform.localEulerAngles = new Vector3(90f, 0f, 180f);
         }
 
-        Debug.LogFormat("[That's The Fox #{0}] Generated deck: {1}", _id, Cards.Join(", "));
-        Debug.LogFormat("[That's The Fox #{0}] Generated solution: {1}", _id, Cards.Count - targetPos);
+        Debug.LogFormat("[That's The Protogen #{0}] Generated deck: {1}", _id, Cards.Join(", "));
+        Debug.LogFormat("[That's The Protogen #{0}] Generated solution: {1}", _id, Cards.Count - targetPos);
 
         LeftButton.OnInteract += Left;
         RightButton.OnInteract += Right;
         BadgerButton.OnInteract += Badger;
+    }
+
+    private List<Card> Shuffle(List<Card> list)
+    {
+        list.AddRange(list);
+        list.AddRange(list);
+        List<Card> outList = new List<Card>();
+        outList.Add(list.PickRandom());
+        list.Remove(outList[0]);
+
+        while(outList.Count < 51)
+        {
+            Card[] candidates = list.Where(c => Check(c, outList.Last(), list.Count)).ToArray();
+            if(candidates.Length == 0)
+                break;
+            outList.Add(candidates.PickRandom());
+            list.Remove(outList.Last());
+        }
+        outList.Reverse();
+        return outList;
+    }
+
+    private bool Check(Card played, Card on, int prevCount)
+    {
+        bool v = played.CardSuit == on.CardSuit || played.Rank == on.Rank;
+        if(prevCount % 2 == 0)
+        {
+            switch(_rule1)
+            {
+                case 0:
+                    v &= played.Rank % 2 == on.Rank % 2;
+                    break;
+                case 1:
+                    v = !v;
+                    break;
+                case 2:
+                    v &= played.SharesColor(on);
+                    break;
+            }
+        }
+        else
+        {
+            switch(_rule2)
+            {
+                case 0:
+                    v &= played.Rank % 2 != on.Rank % 2;
+                    break;
+                case 1:
+                    v &= played.CardSuit != on.CardSuit || played.Rank != on.Rank;
+                    break;
+                case 2:
+                    v &= !played.SharesColor(on);
+                    break;
+            }
+        }
+        return v;
     }
 
     private bool Left()
@@ -89,14 +150,14 @@ public class FoxScript : MonoBehaviour
         if(_solved) return false;
         if(CardsRight.Count == targetPos)
         {
-            Debug.LogFormat("[That's The Fox #{0}] Module solved.", _id, CardsRight.Count);
+            Debug.LogFormat("[That's The Protogen #{0}] Module solved.", _id, CardsRight.Count);
             Audio.PlaySoundAtTransform(audioClips.PickRandom().name, transform);
             _solved = true;
             Module.HandlePass();
         }
         else
         {
-            Debug.LogFormat("[That's The Fox #{0}] You submitted {1}. Strike!", _id, Cards.Count - CardsRight.Count);
+            Debug.LogFormat("[That's The Protogen #{0}] You submitted {1}. Strike!", _id, Cards.Count - CardsRight.Count);
             Module.HandleStrike();
         }
         return false;
@@ -149,7 +210,7 @@ public class FoxScript : MonoBehaviour
     IEnumerator ProcessTwitchCommand(string command)
     {
         Match m;
-        if((m = Regex.Match(command, "^\\s*(?:(?:press|push|tap)\\s+)?(l|r|s|left|right|submit|fox)\\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)).Success)
+        if((m = Regex.Match(command, "^\\s*(?:(?:press|push|tap)\\s+)?(l|r|s|left|right|submit|proto(?:gen)?)\\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)).Success)
         {
             yield return null;
             switch(m.Groups[1].Value.ToLowerInvariant())
@@ -163,13 +224,14 @@ public class FoxScript : MonoBehaviour
                     RightButton.OnInteract();
                     break;
                 case "submit":
-                case "fox":
+                case "proto":
+                case "protogen":
                 case "s":
                     BadgerButton.OnInteract();
                     break;
             }
         }
-        else if((m = Regex.Match(command, "^\\s*(?:(?:press|push|tap)\\s+)?(l|r|left|right)\\s*([1-9]\\d?)\\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)).Success)
+        else if ((m = Regex.Match(command, "^\\s*(?:(?:press|push|tap)\\s+)?(l|r|left|right)\\s*([1-9]\\d?)\\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)).Success)
         {
             yield return null;
             KMSelectable b;
@@ -210,33 +272,5 @@ public class FoxScript : MonoBehaviour
             }
             BadgerButton.OnInteract();
         }
-    }
-}
-
-public static class FoxExtensions
-{
-    public static List<Card> FoxShuffle(this List<Card> list)
-    {
-        list.AddRange(list);
-        list.AddRange(list);
-        List<Card> outList = new List<Card>();
-        outList.Add(list.PickRandom());
-        list.Remove(outList[0]);
-
-        while(outList.Count < 51)
-        {
-            var candidates = list.Where(c => FoxCheck(outList.Last(), c)).ToArray();
-            if(candidates.Length == 0)
-                break;
-            outList.Add(candidates.PickRandom());
-            list.Remove(outList.Last());
-        }
-        outList.Reverse();
-        return outList;
-    }
-
-    public static bool FoxCheck(Card prev, Card played)
-    {
-        return (played.Rank == prev.Rank) || (prev.Rank >= 11 && played.CardSuit == prev.CardSuit) || (played.Rank > prev.Rank && played.CardSuit == prev.CardSuit);
     }
 }

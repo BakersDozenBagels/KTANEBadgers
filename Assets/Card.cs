@@ -12,7 +12,7 @@ public struct Card
     {
         this.Texture = Texture;
         this.Rank = Rank;
-        this.CardSuit = (Suit)Suit;
+        CardSuit = (Suit)Suit;
     }
 
     public override string ToString()
@@ -31,6 +31,17 @@ public struct Card
         Stars,
         Nuts,
         None
+    }
+
+    // Only works with normal four suits
+    public bool SharesColor(Card other)
+    {
+        return CardSuit == Suit.Spades || CardSuit == Suit.Clubs ?
+            other.CardSuit == Suit.Spades || other.CardSuit == Suit.Clubs
+            :
+            CardSuit == Suit.Hearts || CardSuit == Suit.Diamonds ?
+            other.CardSuit == Suit.Hearts || other.CardSuit == Suit.Diamonds
+            : false;
     }
 
     internal static Card Random()

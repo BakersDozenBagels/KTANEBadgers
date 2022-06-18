@@ -29,8 +29,6 @@ public class MoleScript : MonoBehaviour
     private static int _idc;
     private int _id = ++_idc;
 
-    private bool TwitchPlaysActive;
-
     // Use this for initialization
     void Start()
     {
@@ -62,7 +60,7 @@ public class MoleScript : MonoBehaviour
         {
             Texture targetTexture = cardTextures.PickRandom();
             Card target = new Card(targetTexture, ((Array.IndexOf(cardTextures, targetTexture) + 1) % 13) + 1, Mathf.FloorToInt(Array.IndexOf(cardTextures, targetTexture) / 13));
-            for (int i = TwitchPlaysActive ? 40 : Cards.Count() - 2; i >= 0; i--)
+            for(int i = Cards.Count - 2; i >= Cards.Count - 40; i--)
             {
                 if (!MoleExtensions.MoleCheck(mode, target, Cards[i + 1]) && !MoleExtensions.MoleCheck(mode, Cards[i], target))
                 {
@@ -189,6 +187,30 @@ public class MoleScript : MonoBehaviour
                 case "s":
                     BadgerButton.OnInteract();
                     break;
+            }
+        }
+        else if((m = Regex.Match(command, "^\\s*(?:(?:press|push|tap)\\s+)?(l|r|left|right)\\s*([1-9]\\d?)\\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)).Success)
+        {
+            yield return null;
+            KMSelectable b;
+            switch(m.Groups[1].Value.ToLowerInvariant())
+            {
+                case "left":
+                case "l":
+                    b = LeftButton;
+                    break;
+                case "right":
+                case "r":
+                    b = RightButton;
+                    break;
+                default:
+                    throw new Exception();
+            }
+            int c = int.Parse(m.Groups[2].Value);
+            for(int p = 0; p < c; p++)
+            {
+                b.OnInteract();
+                yield return "trywaitcancel 0.5";
             }
         }
     }

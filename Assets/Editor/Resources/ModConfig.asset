@@ -17,7 +17,7 @@ MonoBehaviour:
   description: 'Some Mao-inspired modules.
 
 
-    Ids: ttFox, ttBeaver, ttMole'
-  version: 1.6
+    Ids: ttFox, ttBeaver, ttMole, ttProtogen'
+  version: 2.0
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 3c54a99c67ffed94a87b5af46a6136ca, type: 3}

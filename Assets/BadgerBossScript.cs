@@ -163,6 +163,8 @@ public class BadgerBossScript : MonoBehaviour
                 cl = r.ModifyState(state, nextToPlay, cl);
             if(nextToPlay.Rank == 1)
                 state.CurrentPlayer = state.NextPlayer;
+            if(conds == null)
+                conds = new Condition[0];
             for(int c = 0; c < conds.Length; c++)
                 if(conds[c].Applies(state))
                     conds[c] = conds[c].Decrement();
