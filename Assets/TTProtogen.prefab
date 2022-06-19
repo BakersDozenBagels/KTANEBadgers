@@ -929,6 +929,8 @@ MonoBehaviour:
   audioClips:
   - {fileID: 8300000, guid: 9a8a1fbe48064764aa16efdb30479774, type: 3}
   - {fileID: 8300000, guid: 9494f3e1d91651643866d56d8b7cac69, type: 3}
+  - {fileID: 8300000, guid: 1b2dbc3ce037ebc43939763d66e0bb27, type: 3}
+  - {fileID: 8300000, guid: ae3b1689c76d2d04bb2a783b43261799, type: 3}
   Module: {fileID: 114319442520223158}
   LeftButton: {fileID: 114676105940148938}
   RightButton: {fileID: 114105785714365954}
