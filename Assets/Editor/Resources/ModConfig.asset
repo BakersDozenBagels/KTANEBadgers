@@ -14,10 +14,8 @@ MonoBehaviour:
   id: ttModule
   title: That's The Module
   author: BakersDozenBagels
-  description: 'Some Mao-inspired modules.
-
-
-    Ids: ttFox, ttBeaver, ttMole, ttProtogen'
-  version: 2.1
+  description: "Some Mao-inspired modules.\r\n\r\nFind the manuals here:\r\nhttps://gdane.net/manual/That's%20The%20Fox\r\nhttps://gdane.net/manual/That's%20The%20Beaver\r\nhttps://gdane.net/manual/That's%20The%20Mole\r\nhttps://gdane.net/manual/That's%20The%20Protogen\r\n\r\nIds:
+    ttFox, ttBeaver, ttMole, ttProtogen\r\nSource: https://github.com/BakersDozenBagels/KTANEBadgers"
+  version: 2.2
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 3c54a99c67ffed94a87b5af46a6136ca, type: 3}
